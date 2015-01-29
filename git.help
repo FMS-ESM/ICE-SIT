@@ -1,0 +1,25 @@
+   551	Thu Jan 29 16:16 	git clone https://github.com/btsuang/TW-SIT.git
+   562	Thu Jan 29 16:17 	git log --oneline
+   563	Thu Jan 29 16:18 	git status
+   564	Thu Jan 29 16:18 	git add *
+   566	Thu Jan 29 16:18 	git status
+   567	Thu Jan 29 16:19 	git commit -m 'version 0.5'
+   568	Thu Jan 29 16:20 	git log
+   569	Thu Jan 29 16:20 	git remote
+   570	Thu Jan 29 16:24 	git push origin master
+   573	Thu Jan 29 16:25 	git status
+   574	Thu Jan 29 16:26 	git diff
+   575	Thu Jan 29 16:26 	git add *
+   576	Thu Jan 29 16:26 	git status
+   577	Thu Jan 29 16:27 	git commit
+   578	Thu Jan 29 16:31 	git status
+   579	Thu Jan 29 16:31 	git log
+   580	Thu Jan 29 16:32 	git commit -m "add a bliank line."
+   581	Thu Jan 29 16:32 	git push
+   612	Thu Jan 29 16:51 	git status
+   619	Thu Jan 29 16:52 	git add *
+   620	Thu Jan 29 16:52 	git status
+   621	Thu Jan 29 16:53 	git commit -m "scripts"
+   622	Thu Jan 29 16:54 	git status
+   623	Thu Jan 29 16:54 	git push
+   649	Thu Jan 29 17:09 	history > git.help
