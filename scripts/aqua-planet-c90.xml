@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+
+<experimentSuite rtsVersion="4" xmlns:xi="http://www.w3.org/2003/XInclude">
+
+  <property name="RELEASE"  value="siena_201305"/>
+  <property name="FRE_STEM" value="$ARCHIVE/pp_xml"/>
+  <property name="ANALYSIS_SWITCH"  value="on"/>
+  <property name="FRE_VERSION" value="fre/bronx-7"/>
+
+
+<!-- 3-year simulation (1984-1986) -->
+  <property name="EXP_AMIP_START" value="1984"/>  <!-- Change these -->
+  <property name="EXP_AMIP_END" value="1986"/>
+  <property name="EXP_AMIP_LEN" value="3"/>
+<!-- Post-processing and analysis period (1984-1986) -->
+  <property name="ANA_AMIP_START" value="1984"/>  <!-- Change these -->
+  <property name="ANA_AMIP_END" value="1986"/>
+  <property name="ANA_AMIP_LEN" value="3yr"/>
+<!-- Post-processing chunk length -->
+<!-- ANA_AMIP_LEN must be an integer multiple of PP_AMIP_CHUNK -->
+  <property name="PP_AMIP_CHUNK" value="1yr"/>   <!-- Change these -->
+
+  <setup>
+
+<!-- MDBI -->
+    <fmsRelease>fmsversion</fmsRelease>
+<!-- /MDBI -->
+
+    <platform name="gfdl.ncrc2-intel">
+      <directory stem="$(FRE_STEM)">
+<!-- MDBI requires these to be listed in order to show the path under "Platform Environment" -->
+<!--    <archive>$(FRE_STEM)/$(name)/pp</archive> -->
+        <archive>$(FRE_STEM)/$(name)</archive>
+        <analysis>$(FRE_STEM)/$(name)/Analysis</analysis>
+<!-- /MDBI -->
+      </directory>
+      <property name="F2003_FLAGS"       value=" -DINTERNAL_FILE_NML"/>
+      <property name="AWG_INPUT_HOME"    value="/home/Chris.Golaz/awg/siena_201305/input"/>
+      <property name="FMS_ARCHIVE_ROOT"  value="/archive"/>
+      <property name="AWG_ARCHIVE_ROOT"  value="/archive/Chris.Golaz/awg"/>
+      <property name="PAG_INPUT_ARCHIVE" value="/lustre/ltfs/scratch/Paul.Ginoux/fms/input"/>
+      <csh><![CDATA[
+        source $MODULESHOME/init/csh
+        module use -a /home/fms/local/modulefiles
+        module purge
+        module load $(FRE_VERSION)
+        module load fre-analysis
+
+        ]]>
+      </csh>
+    </platform>
+  </setup>
+
+ 
+  <experiment name="aqua-planet-c90"> 
+<!--  <experiment name="aqua-planet-c90-sit2nnnnnn_v0.202"> -->
+    <scenario 
+      communityForcing="N/A"
+      startTime="$(EXP_AMIP_START)"
+      endTime="$(EXP_AMIP_END)" 
+      parentExperimentID="N/A" 
+      parentExperimentRIP="N/A" 
+      branch_time="0.0">
+    </scenario>
+
+    <input>
+      <dataFile label="gridSpec" target="INPUT/" chksum="" size="" timestamp="">
+<!--         <dataSource platform="$(platform)">/archive/ChiaYing.Tu/grid_spec/aqua-c90.tar</dataSource> -->
+        <dataSource platform="$(platform)">/archive/Benjei.Tsuang/gridSpec/c90_0N180Es1.gridSpec.tar</dataSource> <!-- Change this -->
+      </dataFile>
+      <diagTable>
+$name
+1980 1 1 0 0 0
+      </diagTable>
+    </input>
+
+    <runtime>
+      <production simTime="1" units="years" >
+        <segment simTime="1" units="months"/>
+      </production>
+    </runtime>
+
+    <postProcess>
+        <!-- Change these if you want a different output resolution -->
+      <component type="atmos" interpMethod="conserve_order1" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="180,360">
+        <timeSeries freq="3hr" source="atmos_8xdaily" chunkLength="$(PP_AMIP_CHUNK)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)">
+            <xi:fallback/>
+          </xi:include>
+<!-- MDBI -->
+          <analysis switch="off" cumulative="no" script="$FRE_CURATOR_HOME/share/bin/database_ingestor.csh"/>
+<!-- /MDBI -->
+        </timeSeries>
+        <timeSeries freq="3hr" source="atmos_8xdaily_instant" chunkLength="$(PP_AMIP_CHUNK)">                                                        
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmos8xDailyTS/*)">                
+            <xi:fallback/>                                                                                                                           
+          </xi:include>
+        </timeSeries>
+        <timeSeries freq="6hr" source="atmos_4xdaily" chunkLength="$(PP_AMIP_CHUNK)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmos4xDailyTS/*)">
+            <xi:fallback/>
+          </xi:include>
+	  <analysis switch="on" startYear="$(ANA_AMIP_START)" endYear="$(ANA_AMIP_END)" cumulative="yes" script="/home/Lucas.Harris/research/NGCM-tuning/Analysis/xml/lmh_TCtrack_ts_4x.csh" />
+        </timeSeries>
+        <timeSeries freq="daily" source="atmos_daily" chunkLength="$(PP_AMIP_CHUNK)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosDailyTS/*)">
+            <xi:fallback/>
+          </xi:include>
+        </timeSeries>
+        <timeSeries freq="monthly" source="atmos_month_aer" chunkLength="$(PP_AMIP_CHUNK)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthTS/*)">
+<!--        <timeSeries freq="monthly" source="atmos_diurnal" chunkLength="$(PP_AMIP_CHUNK)"> -->
+<!--          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthTS/*)"> -->
+            <xi:fallback/>
+          </xi:include>
+        </timeSeries>
+        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthTS/*)">
+            <xi:fallback/>
+          </xi:include>
+        </timeSeries>
+        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosMonthAve/*)">
+            <xi:fallback/>
+          </xi:include>
+        </timeAverage>
+        <timeAverage source="annual" interval="$(PP_AMIP_CHUNK)" calcInterval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="annual" interval="$(ANA_AMIP_LEN)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosAnnualAve/*)">
+            <xi:fallback/>
+          </xi:include>
+        </timeAverage>
+      </component>
+
+      <component type="atmos_level" start="$(ANA_AMIP_START)" source="atmos_month" cubicToLatLon="180,360">
+        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)"/>
+        <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosLevelAnnualTS/*)">
+            <xi:fallback/>
+          </xi:include>
+        </timeSeries>
+        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)"/>
+        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)">
+          <xi:include href="/home/fms/local/opt/fre-analysis/test/cjg/xml/analysis_amip.xml" xpointer="xpointer(*/atmosLevelMonthAve/*)">
+            <xi:fallback/>
+          </xi:include>
+        </timeAverage>
+      </component>
+
+      <component type="atmos_diurnal" interpMethod="conserve_order1" zInterp="era40" start="$(ANA_AMIP_START)" source="atmos_diurnal" cubicToLatLon="180,360">
+
+        <timeSeries freq="monthly" chunkLength="$(PP_AMIP_CHUNK)" />
+        <timeSeries freq="annual" chunkLength="$(PP_AMIP_CHUNK)">
+        </timeSeries>
+
+        <timeAverage source="monthly" interval="$(PP_AMIP_CHUNK)" />
+        <timeAverage source="annual" interval="$(PP_AMIP_CHUNK)"  />
+        <timeAverage source="monthly" interval="$(ANA_AMIP_LEN)"  />
+        <timeAverage source="annual" interval="$(ANA_AMIP_LEN)"   />
+
+      </component>
+    </postProcess>
+
+
+  </experiment>
+
+
+</experimentSuite>

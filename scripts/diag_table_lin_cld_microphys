@@ -1,0 +1,21 @@
+cat >>! diag_table <<EOF
+
+ "lin_cld_microphys",    "snow_lin",    "snow_lin",    "atmos_8xdaily", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",   "atmos_8xdaily","all", .true.,  "none", 2
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",    "atmos_8xdaily_instant","all",.false., "none", 2
+ "lin_cld_microphys",    "cond_lin",    "cond_lin",    "atmos_8xdaily_instant","all",.false., "none", 2 
+ #"lin_cld_microphys",   "max_reflectivity", "max_reflectivity", "atmos_8xdaily_instant","all", .false., "none", 2
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",   "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "rain_lin",    "rain_lin",   "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "snow_lin",    "snow_lin",   "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "ice_lin",     "ice_lin",    "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "graupel_lin", "graupel_lin","atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",    "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "snow_lin",    "snow_lin",    "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "graupel_lin", "graupel_lin", "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "ice_lin",     "ice_lin",     "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "var_lin",     "var_lin",     "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "rain_lin",    "rain_lin",    "atmos_month", "all", .true.,"none", 2,
+ 
+EOF
+

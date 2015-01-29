@@ -1,0 +1,707 @@
+cat > diag_table <<EOF
+$name 
+$baseDate
+
+#=======================
+# ATMOSPHERE DIAGNOSTICS
+#=======================
+#output files
+"atmos_8xdaily",  3,  "hours",  1, "days", "time",
+"atmos_8xdaily_instant", 3,  "hours",  1, "days", "time",
+"atmos_4xdaily",  6,  "hours",  1, "days", "time",
+"atmos_4xdaily_average", 6,  "hours",  1, "days", "time",
+"atmos_daily",   24,  "hours",  1, "days", "time",
+"atmos_month",    1,  "months", 1, "days", "time",
+"atmos_diurnal",    1,  "months", 1, "days", "time",
+"ice_8xdaily",  3,  "hours",  1, "days", "time",
+"ice_flux_8xdaily",  3,  "hours",  1, "days", "time",
+"ice_daily",   24,  "hours",  1, "days", "time",
+"ice_flux_daily",  24,  "hours",  1, "days", "time",
+"ice_month",    1,  "months", 1, "days", "time",
+"ice_flux_month",    1,  "months", 1, "days", "time",
+"ice_diurnal",    1,  "months", 1, "days", "time",
+"ice_flux_diurnal",    1,  "months", 1, "days", "time",
+"land_4xdaily",   6,  "hours", 1, "days", "time",
+"land_month",    -1,  "months", 1, "days", "time",
+"grid_spec",     -1,  "months", 1, "days", "time",
+#
+# grid fields
+ "dynamics", "grid_lon",  "grid_lon",  "grid_spec", "all", .false.,  "none", 2,
+ "dynamics", "grid_lat",  "grid_lat",  "grid_spec", "all", .false.,  "none", 2,
+ "dynamics", "grid_lont", "grid_lont", "grid_spec", "all", .false.,  "none", 2,
+ "dynamics", "grid_latt", "grid_latt", "grid_spec", "all", .false.,  "none", 2,
+ "dynamics", "area",      "area",      "grid_spec", "all", .false.,  "none", 2,
+#
+ "moist",     "precip",      "precip",     "atmos_8xdaily","all", .true.,  "none", 2
+ "radiation", "olr",         "olr",        "atmos_8xdaily","all", .true.,  "none", 2
+ "moist",     "prec_conv", "prec_conv","atmos_8xdaily","all", .true.,  "none", 2
+ "moist",     "cape",   "cape",   "atmos_8xdaily", "all", .true., "none", 2
+ "lin_cld_microphys",    "snow_lin",    "snow_lin",    "atmos_8xdaily", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",   "atmos_8xdaily","all", .true.,  "none", 2
+ "dynamics",  "ps",          "ps",         "atmos_8xdaily","all", .true.,  "none", 2
+ "dynamics",  "srh",     "srh",     "atmos_8xdaily", "all", .true.,  "none", 2
+
+# "flux",      "ice_mask",    "ice_mask",    "atmos_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "runoff",      "runoff",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obsseaice",      "obsseaie",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obswtb",      "obswtb",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obswsb",      "obswsb",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "sni",      "sni",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "siced",      "siced",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "tsi",      "tsi",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "tsw",      "tsw",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "ocu",      "ocu",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "ocv",      "ocv",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "seaice",      "seaice",      "ice_8xdaily", "all", .true.,  "none", 2
+ 
+ 
+ # SIT only  >>>>
+# DEBUG
+# "ice_model",      "fluxw",      "fluxw",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "fluxi",      "fluxi",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "dfluxw",      "dfluxw",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "dfluxi",      "dfluxi",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "soflw",      "soflw",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "sofli",      "sofli",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "uflux",      "uflux",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "vflux",      "vflux",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "lprec",      "lprec",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "fprec",      "fprec",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "qflux",      "qflux",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "tprec",      "tprec",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "gust",      "gust",      "ice_8xdaily", "all", .true.,  "none", 2
+#
+# "ice_model",      "cor",      "cor",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "slm",      "slm",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "lclass",      "lclass",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "sitmask",      "sitmask",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "bathy",      "bathy",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wlvl",      "wlvl",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "ocnmask",      "ocnmask",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obox_mask",      "obox_mask",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "tsl",      "tsl",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "tslm",      "tslm",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "tslm1",      "tslm1",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "ctfreez2",      "ctfreez2",      "ice_8xdaily", "all", .true.,  "none", 2
+#
+# "ice_model",      "wtb",      "wtb",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wub",      "wub",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wvb",      "wvb",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wsb",      "wsb",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "fluxiw",      "fluxiw",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "pme2",      "pme2",      "ice_8xdaily", "all", .true.,  "none", 2
+#
+# "ice_model",      "subfluxw",      "subfluxw",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wsubsal",      "wsubsal",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "cc",      "cc",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "hc",      "hc",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "engwac",      "engwac",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "sc",      "sc",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "saltwac",      "saltwac",      "ice_8xdaily", "all", .true.,  "none", 2
+
+# "ice_model",      "wtfns",      "wtfns",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wsfns",      "wsfns",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "zsi0",      "zsi0",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "zsi1",      "zsi1",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "silw0",      "silw0",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "silw1",      "silw1",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic0",      "tsnic0",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic1",      "tsnic1",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic2",      "tsnic2",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic3",      "tsnic3",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obswt",      "obswt",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obsws",      "obsws",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obswu",      "obswu",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "obswv",      "obswv",      "ice_8xdaily", "all", .true.,  "none", 2
+
+ "ice_model",      "wt",      "wt",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "wu",      "wu",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "wv",      "wv",      "ice_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "ws",      "ws",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wrho1000",      "wrho1000",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wtfn",      "wtfn",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wsfn",      "wsfn",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "awufl",      "awufl",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "awvfl",      "awvfl",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "awtfl",      "awtfl",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "awsfl",      "awsfl",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "grndcapc",      "grndcapc",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "grndhflx",      "grndhflx",      "ice_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "grndflux",      "grndflux",      "ice_8xdaily", "all", .true.,  "none", 2
+##
+# "ice_model",      "ww",      "ww",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+ "ice_model",      "wtke",      "wtke",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wlmx",      "wlmx",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wldisp",      "wldisp",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wkm",      "wkm",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "wkh",      "wkh",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+# "ice_model",      "awtkefl",      "awtkefl",      "ice_flux_8xdaily", "all", .true.,  "none", 2
+#
+# <<<< SIT only
+
+#
+#
+##  8X daily instantaneous output
+ "dynamics",  "slp",         "slp",         "atmos_8xdaily_instant","all",.false., "none", 2
+"dynamics",  "tq",          "tq",          "atmos_8xdaily_instant","all",.false., "none", 2
+"lin_cld_microphys",    "prec_lin",    "prec_lin",    "atmos_8xdaily_instant","all",.false., "none", 2
+ "lin_cld_microphys",    "cond_lin",    "cond_lin",    "atmos_8xdaily_instant","all",.false., "none", 2
+ "flux",      "t_ref",       "t_ref",       "atmos_8xdaily_instant", "all", .false.,  "none", 2
+#"fv_nudge",             "ht_error",    "ht_error",    "atmos_8xdaily_instant","all",.false., "none", 2
+"radiation", "olr",         "olr",         "atmos_8xdaily_instant","all", .false., "none", 2
+#"lin_cld_microphys",   "max_reflectivity", "max_reflectivity", "atmos_8xdaily_instant","all", .false., "none", 2
+
+# 4x daily for TC analysis
+#"dynamics",  "us",          "us",          "atmos_4xdaily", "all", .false.,  "none", 2
+#"dynamics",  "vs",          "vs",          "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "vorts",       "vorts",       "atmos_4xdaily", "all", .false.,  "none", 2
+ "flux",      "t_surf",      "t_surf",      "atmos_4xdaily", "all", .false.,  "none", 2
+ "flux",      "u_ref",       "u_ref",       "atmos_4xdaily", "all", .false.,  "none", 2
+ "flux",      "v_ref",       "v_ref",       "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "slp",         "slp",         "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "tm",          "tm",          "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "u500",        "u500",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "u700",        "u700",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "u850",        "u850",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "v500",        "v500",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "v700",        "v700",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "v850",        "v850",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "vort850",     "vort850",     "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "h500",        "h500",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "h700",        "h700",        "atmos_4xdaily", "all", .false.,  "none", 2
+ "dynamics",  "h850",        "h850",        "atmos_4xdaily", "all", .false.,  "none", 2
+#4x_daily_average for winter snow storm
+ "uw_conv",   "snow_uwc", "snow_uwc",  "atmos_4xdaily_average", "all", .true., "none", 2
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",   "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "rain_lin",    "rain_lin",   "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "snow_lin",    "snow_lin",   "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "ice_lin",     "ice_lin",    "atmos_4xdaily_average","all", .true.,  "none", 2
+ "lin_cld_microphys",    "graupel_lin", "graupel_lin","atmos_4xdaily_average","all", .true.,  "none", 2
+ "moist",     "snow_conv", "snow_conv","atmos_4xdaily_average","all", .true.,  "none", 2
+ "moist",     "prec_conv", "prec_conv","atmos_4xdaily_average","all", .true.,  "none", 2
+ "moist",     "precip",      "precip",      "atmos_4xdaily_average", "all", .true.,  "none", 2
+ "land",    "snow",       "snow",     "land_4xdaily",  "all", .true., "none", 2
+#
+#"dynamics",  "s200",        "s200",        "atmos_2xdaily", "all", .false.,  "none", 2
+# Daily averages:
+#"moist",     "precip",      "precip",      "atmos_daily", "all", .true.,  "none", 2
+"radiation", "olr",         "olr",         "atmos_daily", "all", .true.,  "none", 2
+"dynamics",  "u200",        "u200",        "atmos_daily", "all", .true.,  "none", 2
+"dynamics",  "v200",        "v200",        "atmos_daily", "all", .true.,  "none", 2
+ "ice_model",      "runoff",      "runoff",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "obsseaice",      "obsseaice",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "obswtb",      "obswtb",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "obswsb",      "obswsb",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "sni",      "sni",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "siced",      "siced",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsi",      "tsi",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsw",      "tsw",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "ocu",      "ocu",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "ocv",      "ocv",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "seaice",      "seaice",      "ice_daily", "all", .true.,  "none", 2
+ # SIT only  >>>>
+# DEBUG
+ "ice_model",      "fluxw",      "fluxw",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "fluxi",      "fluxi",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "dfluxw",      "dfluxw",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "dfluxi",      "dfluxi",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "soflw",      "soflw",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "sofli",      "sofli",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "uflux",      "uflux",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "vflux",      "vflux",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "lprec",      "lprec",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "fprec",      "fprec",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "qflux",      "qflux",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tprec",      "tprec",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "gust",      "gust",      "ice_daily", "all", .true.,  "none", 2
+#
+ "ice_model",      "cor",      "cor",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "slm",      "slm",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "lclass",      "lclass",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "sitmask",      "sitmask",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "bathy",      "bathy",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wlvl",      "wlvl",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "ocnmask",      "ocnmask",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "obox_mask",      "obox_mask",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsl",      "tsl",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tslm",      "tslm",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tslm1",      "tslm1",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "ctfreez2",      "ctfreez2",      "ice_daily", "all", .true.,  "none", 2
+
+ "ice_model",      "wtb",      "wtb",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wub",      "wub",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wvb",      "wvb",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wsb",      "wsb",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "fluxiw",      "fluxiw",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "pme2",      "pme2",      "ice_daily", "all", .true.,  "none", 2
+
+ "ice_model",      "subfluxw",      "subfluxw",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wsubsal",      "wsubsal",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "cc",      "cc",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "hc",      "hc",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "engwac",      "engwac",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "sc",      "sc",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "saltwac",      "saltwac",      "ice_daily", "all", .true.,  "none", 2
+
+ "ice_model",      "wtfns",      "wtfns",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wsfns",      "wsfns",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "zsi0",      "zsi0",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "zsi1",      "zsi1",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "silw0",      "silw0",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "silw1",      "silw1",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic0",      "tsnic0",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic1",      "tsnic1",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic2",      "tsnic2",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "tsnic3",      "tsnic3",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "obswt",      "obswt",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "obsws",      "obsws",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "obswu",      "obswu",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "obswv",      "obswv",      "ice_daily", "all", .true.,  "none", 2
+
+ "ice_model",      "wt",      "wt",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wu",      "wu",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "wv",      "wv",      "ice_daily", "all", .true.,  "none", 2
+ "ice_model",      "ws",      "ws",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "wrho1000",      "wrho1000",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "wtfn",      "wtfn",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "wsfn",      "wsfn",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "awufl",      "awufl",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "awvfl",      "awvfl",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "awtfl",      "awtfl",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "awsfl",      "awsfl",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "grndcapc",      "grndcapc",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "grndhflx",      "grndhflx",      "ice_daily", "all", .true.,  "none", 2
+# "ice_model",      "grndflux",      "grndflux",      "ice_daily", "all", .true.,  "none", 2
+##
+# "ice_model",      "ww",      "ww",      "ice_flux_daily", "all", .true.,  "none", 2
+ "ice_model",      "wtke",      "wtke",      "ice_flux_daily", "all", .true.,  "none", 2
+ "ice_model",      "wlmx",      "wlmx",      "ice_flux_daily", "all", .true.,  "none", 2
+ "ice_model",      "wldisp",      "wldisp",      "ice_flux_daily", "all", .true.,  "none", 2
+ "ice_model",      "wkm",      "wkm",      "ice_flux_daily", "all", .true.,  "none", 2
+ "ice_model",      "wkh",      "wkh",      "ice_flux_daily", "all", .true.,  "none", 2
+# "ice_model",      "awtkefl",      "awtkefl",      "ice_flux_daily", "all", .true.,  "none", 2
+#
+# <<<< SIT only 
+ 
+#
+ "flux",      "tau_x",       "tau_x",       "atmos_month", "all", .true.,  "none", 2
+ "flux",      "tau_y",       "tau_y",       "atmos_month", "all", .true.,  "none", 2
+ "flux",      "drag_heat",   "drag_heat",   "atmos_month", "all", .true.,  "none", 2
+ "flux",      "drag_moist",  "drag_moist",  "atmos_month", "all", .true.,  "none", 2
+ "flux",      "drag_mom",    "drag_mom",    "atmos_month", "all", .true.,  "none", 2
+ "flux",      "evap",        "evap",        "atmos_month", "all", .true.,  "none", 2
+ "flux",      "ice_mask",    "ice_mask",    "atmos_month", "all", .true.,  "none", 2
+ "flux",      "land_mask",   "land_mask",   "atmos_month", "all", .false., "none", 2
+ "flux",      "lwflx",       "lwflx",       "atmos_month", "all", .true.,  "none", 2
+ "flux",      "rh_ref",      "rh_ref",      "atmos_month", "all", .true.,  "none", 2
+ "flux",      "shflx",       "shflx",       "atmos_month", "all", .true.,  "none", 2
+ "flux",      "t_ref",       "t_ref",       "atmos_month", "all", .true.,  "none", 2
+ "flux",      "t_surf",      "t_surf",      "atmos_month", "all", .true.,  "none", 2
+ "flux",      "u_ref",       "u_ref",       "atmos_month", "all", .true.,  "none", 2
+ "flux",      "v_ref",       "v_ref",       "atmos_month", "all", .true.,  "none", 2
+#"flux",      "wind",        "wind",        "atmos_month", "all", .true.,  "none", 2
+#"flux",      "q_star",      "q_star",      "atmos_month", "all", .true.,  "none", 2,
+
+#SIT (AQUA)
+# "flux",      "siced",       "siced",       "atmos_month", "all", .true.,  "none", 2
+# "flux",      "obsseaice",   "obsseaice",   "atmos_month", "all", .true.,  "none", 2
+# "flux",      "obswtb",      "obswtb",      "atmos_month", "all", .true.,  "none", 2
+# "flux",      "obswsb",      "obswsb",      "atmos_month", "all", .true.,  "none", 2
+#
+#
+ "dynamics",  "bk",          "bk",          "atmos_month", "all", .false., "none", 2
+ "dynamics",  "pk",          "pk",          "atmos_month", "all", .false., "none", 2
+ "dynamics",  "zsurf",       "zsurf",       "atmos_month", "all", .false., "none", 2
+ "dynamics",  "ps",          "ps",          "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "slp",         "slp",         "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "tm",          "tm",          "atmos_month", "all", .true.,  "none", 2
+#---- special hurricane diagnostics ------
+#"dynamics",  "slp",         "slp_min",   "atmos_month", "all",  min,    "none", 2
+ "dynamics",  "cat15",       "cat15",     "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "cat25",       "cat25",     "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "cat35",       "cat35",     "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "cat45",       "cat45",     "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "cat15",       "cat_max",   "atmos_month", "all",  max,    "none", 2
+ "dynamics",  "f15",         "f15",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "f25",         "f25",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "f35",         "f35",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "f45",         "f45",       "atmos_month", "all", .true.,  "none", 2
+#---- special hurricane diagnostics ------
+"dynamics",  "h300",        "h300",        "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "h500",        "h500",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "temp",        "temp",        "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "ucomp",       "ucomp",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "vcomp",       "vcomp",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "sphum",       "sphum",       "atmos_month", "all", .true.,  "none", 2
+ "dynamics",  "omega",       "omega",       "atmos_month", "all", .true.,  "none", 2
+"dynamics",  "cld_amt",     "cld_amt",     "atmos_month", "all", .true.,  "none", 2
+"dynamics",  "liq_wat",     "liq_wat",     "atmos_month", "all", .true.,  "none", 2
+"dynamics",  "ice_wat",     "ice_wat",     "atmos_month", "all", .true.,  "none", 2
+"dynamics",  "snowwat",     "snowwat",     "atmos_month", "all", .true.,  "none", 2
+"dynamics",  "rainwat",     "rainwat",     "atmos_month", "all", .true.,  "none", 2
+"dynamics",  "graupel",     "graupel",     "atmos_month", "all", .true.,  "none", 2
+#
+ "moist",     "IWP",         "IWP",         "atmos_month", "all", .true.,  "none", 2
+ "moist",     "LWP",         "LWP",         "atmos_month", "all", .true.,  "none", 2
+ "moist",     "WVP",         "WVP",         "atmos_month", "all", .true.,  "none", 2
+ "moist",     "precip",      "precip",      "atmos_month", "all", .true.,  "none", 2
+ "moist",     "prec_conv",   "prec_conv",   "atmos_month", "all", .true., "none", 2
+ "moist",     "rh",          "rh",          "atmos_month", "all", .true.,  "none", 2
+ "moist",     "cape",        "cape",          "atmos_month", "all", .true.,  "none", 2
+ "radiation", "alb_sfc",     "alb_sfc",     "atmos_month", "all", .true.,  "none", 2
+ "radiation", "lwdn_sfc",    "lwdn_sfc",    "atmos_month", "all", .true.,  "none", 2
+ "radiation", "lwup_sfc",    "lwup_sfc",    "atmos_month", "all", .true.,  "none", 2
+ "radiation", "netrad_toa",  "netrad_toa",  "atmos_month", "all", .true.,  "none", 2
+ "radiation", "olr",         "olr",         "atmos_month", "all", .true.,  "none", 2
+ "radiation", "qo3_col",     "qo3_col",     "atmos_month", "all", .true.,  "none", 2
+ "radiation", "swdn_sfc",    "swdn_sfc",    "atmos_month", "all", .true.,  "none", 2
+ "radiation", "swup_sfc",    "swup_sfc",    "atmos_month", "all", .true.,  "none", 2
+ "radiation", "swdn_toa",    "swdn_toa",    "atmos_month", "all", .true.,  "none", 2
+ "radiation", "swup_toa",    "swup_toa",    "atmos_month", "all", .true.,  "none", 2
+ "radiation", "lwdn_sfc_clr","lwdn_sfc_clr","atmos_month", "all", .true.,  "none", 2
+ "radiation", "lwup_sfc_clr","lwup_sfc_clr","atmos_month", "all", .true.,  "none", 2
+ "radiation", "netrad_toa_clr","netrad_toa_clr","atmos_month", "all", .true.,"none", 2
+ "radiation", "olr_clr",     "olr_clr",     "atmos_month", "all", .true.,  "none", 2
+ "radiation", "swdn_sfc_clr","swdn_sfc_clr","atmos_month", "all", .true.,  "none", 2
+ "radiation", "swup_sfc_clr","swup_sfc_clr","atmos_month", "all", .true.,  "none", 2
+ "radiation", "swdn_toa_clr","swdn_toa_clr","atmos_month", "all", .true.,  "none", 2
+ "radiation", "swup_toa_clr","swup_toa_clr","atmos_month", "all", .true.,  "none", 2
+#"radiation", "qo3",         "qo3",         "atmos_month", "all", .true.,  "none", 2
+#"radiation", "tdt_lw",      "tdt_lw",      "atmos_month", "all", .true.,  "none", 2
+#"radiation", "tdt_sw",      "tdt_sw",      "atmos_month", "all", .true.,  "none", 2
+#"radiation", "tdt_lw_clr",  "tdt_lw_clr",  "atmos_month", "all", .true.,  "none", 2
+#"radiation", "tdt_sw_clr",  "tdt_sw_clr",  "atmos_month", "all", .true.,  "none", 2
+ "cloudrad",  "high_cld_amt","high_cld_amt","atmos_month", "all", .true.,  "none", 2
+ "cloudrad",  "low_cld_amt", "low_cld_amt", "atmos_month", "all", .true.,  "none", 2
+ "cloudrad",  "mid_cld_amt", "mid_cld_amt", "atmos_month", "all", .true.,  "none", 2
+ "cloudrad",  "tot_cld_amt", "tot_cld_amt", "atmos_month", "all", .true.,  "none", 2
+ "moist",     "precip_conv", "precip_conv",   "atmos_month", "all", .true.,  "none", 2
+ "moist",     "snow_conv",   "snow_conv",   "atmos_month", "all", .true.,  "none", 2
+ "moist",     "snow_ls",     "snow_ls",     "atmos_month", "all", .true.,  "none", 2
+ "lin_cld_microphys",    "prec_lin",    "prec_lin",    "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "snow_lin",    "snow_lin",    "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "graupel_lin", "graupel_lin", "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "ice_lin",     "ice_lin",     "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "var_lin",     "var_lin",     "atmos_month", "all", .true.,"none", 2,
+ "lin_cld_microphys",    "rain_lin",    "rain_lin",    "atmos_month", "all", .true.,"none", 2,
+ "dynamics",  "srh",     "srh",     "atmos_month", "all", .true.,  "none", 2
+# diurnal cycle
+ "flux",      "land_mask",   "land_mask",   "atmos_diurnal", "all", .false.,     "none", 2,
+ "flux",      "rh_ref",      "rh_ref",      "atmos_diurnal", "all", "diurnal24", "none", 2
+ "flux",      "slp",         "slp",         "atmos_diurnal", "all", "diurnal24", "none", 2,
+ "flux",      "t_ref",       "t_ref",       "atmos_diurnal", "all", "diurnal24", "none", 2
+ "flux",      "wind",        "wind",        "atmos_diurnal", "all", "diurnal24", "none", 2
+ "moist",     "precip",      "precip",      "atmos_diurnal", "all", "diurnal24", "none", 2
+ "moist",     "prec_conv",   "prec_conv",   "atmos_diurnal", "all", "diurnal24", "none", 2
+# ----- diag_table for COSP -----
+"atmos_month_cosp",      1, "months",  1, "days", "time",
+# ISCCP monthly outputs
+"cosp", "clisccp_1", "clisccp_1", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "clisccp_2", "clisccp_2", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "clisccp_3", "clisccp_3", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "clisccp_4", "clisccp_4", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "clisccp_5", "clisccp_5", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "clisccp_6", "clisccp_6", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "clisccp_7", "clisccp_7", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "ctpisccp", "ctpisccp", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "albisccp", "albisccp", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauisccp", "tauisccp", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tbclrisccp", "tbclrisccp", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tbisccp", "tbisccp", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tclisccp", "tclisccp", "atmos_month_cosp", "all", .true., "none", 2,
+# MISR outputs
+"cosp", "misr_1", "misr_1", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_10", "misr_10", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_11", "misr_11", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_12", "misr_12", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_13", "misr_13", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_14", "misr_14", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_15", "misr_15", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_16", "misr_16", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_2", "misr_2", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_3", "misr_3", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_4", "misr_4", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_5", "misr_5", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_6", "misr_6", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_7", "misr_7", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_8", "misr_8", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "misr_9", "misr_9", "atmos_month_cosp", "all", .true., "none", 2,
+# MODIS outputs
+"cosp", "tauctpmodis_1", "tauctpmodis_1", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauctpmodis_2", "tauctpmodis_2", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauctpmodis_3", "tauctpmodis_3", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauctpmodis_4", "tauctpmodis_4", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauctpmodis_5", "tauctpmodis_5", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauctpmodis_6", "tauctpmodis_6", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tauctpmodis_7", "tauctpmodis_7", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "ctpmodis", "ctpmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "hicldmodis", "hicldmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "iclmodis", "iclmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "ilogtaumodis", "ilogtaumodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "iremodis", "iremodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "itaumodis", "itaumodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "iwpmodis", "iwpmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "lclmodis", "lclmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "llogtaumodis", "llogtaumodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "locldmodis", "locldmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "lremodis", "lremodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "ltaumodis", "ltaumodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "lwpmodis", "lwpmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "mdcldmodis", "mdcldmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tclmodis", "tclmodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "tlogtaumodis", "tlogtaumodis", "atmos_month_cosp", "all", .true., "none", 2,
+"cosp", "ttaumodis", "ttaumodis", "atmos_month_cosp", "all", .true., "none", 2,
+
+# ice_month:
+# "ice_model",      "runoff",      "runoff",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obsseaice",      "obsseaie",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obswtb",      "obswtb",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obswsb",      "obswsb",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "sni",      "sni",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "siced",      "siced",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsi",      "tsi",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsw",      "tsw",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "ocu",      "ocu",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "ocv",      "ocv",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "seaice",      "seaice",      "ice_month", "all", .true.,  "none", 2
+ 
+ 
+ # SIT only  >>>>
+# DEBUG
+ "ice_model",      "fluxw",      "fluxw",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "fluxi",      "fluxi",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "dfluxw",      "dfluxw",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "dfluxi",      "dfluxi",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "soflw",      "soflw",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "sofli",      "sofli",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "uflux",      "uflux",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "vflux",      "vflux",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "lprec",      "lprec",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "fprec",      "fprec",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "qflux",      "qflux",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tprec",      "tprec",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "gust",      "gust",      "ice_month", "all", .true.,  "none", 2
+#
+ "ice_model",      "cor",      "cor",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "slm",      "slm",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "lclass",      "lclass",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "sitmask",      "sitmask",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "bathy",      "bathy",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wlvl",      "wlvl",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "ocnmask",      "ocnmask",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obox_mask",      "obox_mask",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsl",      "tsl",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tslm",      "tslm",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tslm1",      "tslm1",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "ctfreez2",      "ctfreez2",      "ice_month", "all", .true.,  "none", 2
+
+ "ice_model",      "wtb",      "wtb",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wub",      "wub",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wvb",      "wvb",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wsb",      "wsb",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "fluxiw",      "fluxiw",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "pme2",      "pme2",      "ice_month", "all", .true.,  "none", 2
+
+ "ice_model",      "subfluxw",      "subfluxw",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wsubsal",      "wsubsal",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "cc",      "cc",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "hc",      "hc",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "engwac",      "engwac",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "sc",      "sc",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "saltwac",      "saltwac",      "ice_month", "all", .true.,  "none", 2
+
+ "ice_model",      "wtfns",      "wtfns",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wsfns",      "wsfns",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "zsi0",      "zsi0",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "zsi1",      "zsi1",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "silw0",      "silw0",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "silw1",      "silw1",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsnic0",      "tsnic0",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsnic1",      "tsnic1",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsnic2",      "tsnic2",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "tsnic3",      "tsnic3",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obswt",      "obswt",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obsws",      "obsws",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obswu",      "obswu",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "obswv",      "obswv",      "ice_month", "all", .true.,  "none", 2
+
+ "ice_model",      "wt",      "wt",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wu",      "wu",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wv",      "wv",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "ws",      "ws",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wrho1000",      "wrho1000",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wtfn",      "wtfn",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "wsfn",      "wsfn",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "awufl",      "awufl",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "awvfl",      "awvfl",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "awtfl",      "awtfl",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "awsfl",      "awsfl",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "grndcapc",      "grndcapc",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "grndhflx",      "grndhflx",      "ice_month", "all", .true.,  "none", 2
+ "ice_model",      "grndflux",      "grndflux",      "ice_month", "all", .true.,  "none", 2
+#
+ "ice_model",      "ww",      "ww",      "ice_flux_month", "all", .true.,  "none", 2
+ "ice_model",      "wtke",      "wtke",      "ice_flux_month", "all", .true.,  "none", 2
+ "ice_model",      "wlmx",      "wlmx",      "ice_flux_month", "all", .true.,  "none", 2
+ "ice_model",      "wldisp",      "wldisp",      "ice_flux_month", "all", .true.,  "none", 2
+ "ice_model",      "wkm",      "wkm",      "ice_flux_month", "all", .true.,  "none", 2
+ "ice_model",      "wkh",      "wkh",      "ice_flux_month", "all", .true.,  "none", 2
+ "ice_model",      "awtkefl",      "awtkefl",      "ice_flux_month", "all", .true.,  "none", 2
+#
+# ice_diurnal:
+
+# "ice_model",      "runoff",     "runoff",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obsseaice",  "obsseaie",   "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obswtb",     obswtb",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obswsb",     obswsb",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "sni",        "sni",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "siced",      "siced",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsi",        "tsi",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsw",        "tsw",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "ocu",        "ocu",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "ocv",        "ocv",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "seaice",     "seaice",     "ice_diurnal", "all", "diurnal24", "none", 2
+  
+ # SIT only  >>>>
+# DEBUG
+ "ice_model",      "fluxw",      "fluxw",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "fluxi",      "fluxi",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "dfluxw",     "dfluxw",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "dfluxi",     "dfluxi",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "soflw",      "soflw",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "sofli",      "sofli",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "uflux",      "uflux",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "vflux",      "vflux",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "lprec",      "lprec",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "fprec",      "fprec",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "qflux",      "qflux",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tprec",      "tprec",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "gust",       "gust",       "ice_diurnal", "all", "diurnal24", "none", 2
+#
+ "ice_model",      "cor",        "cor",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "slm",        "slm",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "lclass",     "lclass",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "sitmask",    "sitmask",    "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "bathy",      "bathy",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wlvl",       "wlvl",       "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "ocnmask",    "ocnmask",    "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obox_mask",  "obox_mask",  "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsl",        "tsl",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tslm",       "tslm",       "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tslm1",      "tslm1",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "ctfreez2",   "ctfreez2",   "ice_diurnal", "all", "diurnal24", "none", 2
+                                 
+ "ice_model",      "wtb",        "wtb",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wub",        "wub",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wvb",        "wvb",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wsb",        "wsb",        "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "fluxiw",     "fluxiw",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "pme2",       "pme2",       "ice_diurnal", "all", "diurnal24", "none", 2
+
+ "ice_model",      "subfluxw",   "subfluxw",   "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wsubsal",    "wsubsal",    "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "cc",         "cc",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "hc",         "hc",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "engwac",     "engwac",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "sc",         "sc",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "saltwac",    "saltwac",    "ice_diurnal", "all", "diurnal24", "none", 2
+
+ "ice_model",      "wtfns",      "wtfns",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wsfns",      "wsfns",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "zsi0",       "zsi0",       "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "zsi1",       "zsi1",       "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "silw0",      "silw0",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "silw1",      "silw1",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsnic0",     "tsnic0",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsnic1",     "tsnic1",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsnic2",     "tsnic2",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "tsnic3",     "tsnic3",     "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obswt",      "obswt",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obsws",      "obsws",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obswu",      "obswu",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "obswv",      "obswv",      "ice_diurnal", "all", "diurnal24", "none", 2
+
+ "ice_model",      "wt",         "wt",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wu",         "wu",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wv",         "wv",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "ws",         "ws",         "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wrho1000",   "wrho1000",   "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wtfn",       "wtfn",       "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wsfn",       "wsfn",       "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "awufl",      "awufl",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "awvfl",      "awvfl",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "awtfl",      "awtfl",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "awsfl",      "awsfl",      "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "grndcapc",   "grndcapc",   "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "grndhflx",   "grndhflx",   "ice_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "grndflux",   "grndflux",   "ice_diurnal", "all", "diurnal24", "none", 2
+#
+ "ice_model",      "ww",      "ww",      "ice_flux_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wtke",      "wtke",      "ice_flux_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wlmx",      "wlmx",      "ice_flux_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wldisp",      "wldisp",      "ice_flux_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wkm",      "wkm",      "ice_flux_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "wkh",      "wkh",      "ice_flux_diurnal", "all", "diurnal24", "none", 2
+ "ice_model",      "awtkefl",      "awtkefl",      "ice_flux_diurnal", "all", "diurnal24", "none", 2 
+#
+## land diagnostics:
+ "land",    "area",       "area",        "land_month",  "all", .true., "none", 2,
+ "land",    "area_soil",  "soil_area",   "land_month",  "all", .true., "none", 2,
+ "land",    "area_glac",  "glac_area",   "land_month",  "all", .true., "none", 2,
+ "land",    "area_lake",  "lake_area",   "land_month",  "all", .true., "none", 2,
+ "land",    "water",      "water",       "land_month",  "all", .true., "none", 2,
+ "land",    "snow",       "snow",        "land_month",  "all", .true., "none", 2,
+ "land",    "precip",     "precip",      "land_month",  "all", .true., "none", 2,
+ "land",    "wroff",      "wroff",       "land_month",  "all", .true., "none", 2,
+"land",    "sroff",      "sroff",       "land_month",  "all", .true., "none", 2,
+ "land",    "fsw",        "fsw",         "land_month",  "all", .true., "none", 2,
+ "land",    "flw",        "flw",         "land_month",  "all", .true., "none", 2,
+ "land",    "sens",       "sens" ,       "land_month",  "all", .true., "none", 2,
+ "land",    "transp",     "transp",      "land_month",  "all", .true., "none", 2,
+ "soil",    "soil_evap",  "soil_evap",   "land_month",  "all", .true., "none", 2,
+ "soil",    "soil_ice",   "soil_ice",    "land_month",  "all", .true., "none", 2
+ "soil",    "soil_liq",   "soil_liq",    "land_month",  "all", .true., "none", 2
+ "soil",    "soil_psi",   "soil_psi",    "land_month",  "all", .true., "none", 2
+ "soil",    "soil_T",     "soil_T",      "land_month",  "all", .true., "none", 2
+ "lake",    "lake_evap",  "lake_evap",   "land_month",  "all", .true., "none", 2,
+ "vegn",    "temp",       "vegn_temp",   "land_month",  "all", .true., "none", 2,
+ "vegn",    "wl",         "vegn_wl",     "land_month",  "all", .true., "none", 2,
+ "vegn",    "ws",         "vegn_ws",     "land_month",  "all", .true., "none", 2,
+ "vegn",    "LAI",        "vegn_LAI",    "land_month",  "all", .true., "none", 2,
+ "vegn",    "npp",        "npp",         "land_month",  "all", .true., "none", 2,
+#
+#=============================================================================================
+#
+#==== This file can be used with diag_manager/v2.0a (or higher)  ====
+#
+#
+#  FORMATS FOR FILE ENTRIES (not all input values are used)
+#  ========================
+#
+#"file_name", output_freq, "output_units", format, "time_units", "long_name",
+#
+#
+#output_freq:  > 0  output frequency in "output_units"
+#              = 0  output frequency every time step
+#              =-1  output frequency at end of run
+#
+#output_units = units used for output frequency
+#               (years, months, days, minutes, hours, seconds)
+#
+#time_units   = units used to label the time axis
+#               (days, minutes, hours, seconds)
+#
+#
+#  FORMAT FOR FIELD ENTRIES (not all input values are used)
+#  ========================
+#
+#"module_name", "field_name", "output_name", "file_name" "time_sampling", time_avg, "other_opts", packing
+#
+#time_avg = .true. or .false.
+#
+#packing  = 1  double precision
+#         = 2  float
+#         = 4  packed 16-bit integers
+#         = 8  packed 1-byte (not tested?)
+EOF
+

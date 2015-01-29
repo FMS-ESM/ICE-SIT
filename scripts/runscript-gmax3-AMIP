@@ -1,0 +1,580 @@
+#!/bin/csh -fv
+
+########################################################################
+# generic run script for experiments                     
+########################################################################
+
+#PBS -o /autofs/na1_home1/Lucas.Harris/tikal/runs/c192/stdout/
+#PBS -N c192-gmax3-AMIP
+#PBS -l walltime=16:00:00
+#PBS -q batch
+#PBS -A gfdl_w
+#PBS -l partition=c1:c2
+#PBS -l size=1944
+#PBS -m abe
+#PBS -j oe
+#PBS -l qos=windfall
+
+  set echo
+  set beginruntime = `date "+%s"`
+
+########################################################################
+# set experiment-specific variables                       
+########################################################################
+
+  set suffix = AMIP_b2_p7-gmax3
+
+# experiment name:
+  set name = runs/c192
+
+# experiment source directory name:
+  set base = tikal
+
+# script name:
+  set scriptName = $HOME/$base/$name/runscript-gmax3-AMIP
+
+# name of executable:
+  set executable = /lustre/f1/unswept/Lucas.Harris/tikal/exec/fms_tikal.x
+
+# home directory:
+  set sourceDir = $HOME/$base/$name/
+
+# fast scratch:
+  set fscratch = /lustre/f1/$USER/${base}/${name}-${suffix}
+
+# long-term scratch:
+  set lscratch = /lustre/f1/unswept/$USER/${base}/${name}-${suffix}
+
+# gfdl archive:
+  set gfdl_archive = /archive/$USER/${base}/${name}-${suffix}
+  
+  setenv begDate  '2000,1,1,0,0,0'
+  setenv baseDate '1980 1 1 0 0 0'
+
+########################################################################
+# set experiment initial conditions on short-term scratch                       
+########################################################################
+
+  set initCond           = /lustre/f1/Lucas.Harris/tikal/runs/c192-AMIP_b2_p7-gmax3-e2/restart/20140101/
+#/lustre/f1/pdata/gfdl_W/Lucas.Harris/IC/c192L32-1g-awg
+  set input_data         = /lustre/f1/pdata/gfdl_W/Lucas.Harris/HiRAM/input_data-lmh-rev201403
+#  set input_data         = /lustre/f1/pdata/gfdl_W/Lucas.Harris/HiRAM/input_data-lm3-mod
+  set mosaic_grid        = '/lustre/f1/pdata/gfdl_W/Lucas.Harris/awg/input/grid/C192_CM2.5FLOR_grid'
+# from   set gridSpec = /lustre/f1/unswept/Chris.Golaz/awg/input/grid/C192_CM2.5FLOR_grid.tar
+  set dst_static_veg     = '/lustre/f1/pdata/gfdl_W/Lucas.Harris/awg/input/lm3/c192_19810101_static_veg_20130911'
+#from /lustre/f1/unswept/Chris.Golaz/awg/input/lm3/c192_19810101_static_veg_20130911.tar
+  set input_data_land    = '/lustre/f1/pdata/gfdl_W/Lucas.Harris/awg/input/lm3/lm3_data_20130815'
+  set input_hydrography  = '/lustre/f1/pdata/gfdl_W/Lucas.Harris/awg/input/lm3/c192_hydrography_20130813'
+#from /lustre/f1/unswept/Chris.Golaz/awg/input/lm3/c192_hydrography_20130813.tar and /lustre/ltfs/scratch/Chris.Golaz/awg/input/lm3/lm3_data_20130815.tar
+
+  set input_data_grid    = 'null'
+  set dst_restart_land   = 'null'
+
+########################################################################
+# set experiment initial conditions on long-term scratch                      
+########################################################################
+
+  set initCond_ltfs           = 'null'
+  set input_data_ltfs         = 'null'
+  set input_data_grid_ltfs    = 'null'
+  set mosaic_grid_ltfs        = 'null'
+  set dst_static_veg_ltfs     = 'null'
+  set dst_restart_land_ltfs   = 'null'
+
+########################################################################
+# note: all string substitutions in these files must be done with 
+# setting the variables as environmental variables
+########################################################################
+
+  set input_nml    = $sourceDir/input.nml-${suffix}
+  set diag_table   = $sourceDir/diag_table-AMIP
+  set field_table  = $sourceDir/field_table
+
+  set monthslist     = ( 6 6 6 6 )
+  set dayslist       = ( 0 0 0 0 )
+  set hourslist      = ( 0 0 0 0 ) 
+  set numSubmissions =  28 # 11 # 36
+
+  setenv npes_x  18
+  setenv npes_y  18
+  setenv mpes_x  0
+  setenv mpes_y  0
+  setenv layout_cube  $npes_x,$npes_y
+  setenv layout_grid  $mpes_x,$mpes_y
+  setenv spread 1
+
+  setenv npex_io 2
+  setenv npey_io 2
+  setenv mpex_io 0
+  setenv mpey_io 0
+
+  @ npes_g1=$npes_x * $npes_y * 6
+  @ npes=$npes_x * $npes_y * 6
+
+########################################################################
+# set path names
+########################################################################
+
+  set send_file  = $HOME/coupled_siena/scripts/send_file.csh
+
+########################################################################
+# default directories
+########################################################################
+
+  set workDir        = $fscratch/work
+  set stdoutDir      = $scriptName:h/stdout
+  set outputDir      = $fscratch
+  set outputDir_ltfs = $lscratch
+
+#################################################################
+# set environment
+#################################################################
+
+  setenv siteConfig $HOME/$base/scripts/env.cshrc 
+
+  if ( -f $siteConfig ) source $siteConfig
+  which time_stamp.csh
+
+  setenv MAIN_PROGRAM coupler_main.o
+  set lustre_options = '1048576 -1 12'
+
+  limit stacksize    unlimited
+  limit coredumpsize unlimited
+
+  setenv MPICH_UNEX_BUFFER_SIZE 256m
+  setenv MPICH_MAX_SHORT_MSG_SIZE 64000
+  setenv MPICH_PTL_UNEX_EVENTS 160k
+  setenv OMP_NUM_THREADS  $spread
+  setenv cores_per_node  32
+
+  @ mpi_tasks_per_node=$cores_per_node / $OMP_NUM_THREADS
+  echo ' number of MPI tasks per compute node  = ' $mpi_tasks_per_node
+
+
+########################################################################
+# only highly premeditated user changes below here
+########################################################################
+
+  if ( $#dayslist != $#monthslist ) then
+    unset echo
+    echo "ERROR: dayslist and monthslist must be lists of the same length"
+    exit 1
+  endif
+
+  set segmentsPerJob = $#dayslist
+
+  echo ${npes}pe_${segmentsPerJob}run
+
+########################################################################
+# set up variables for looping and reloading
+########################################################################
+
+  set irun             = 1
+  set ireload          = 1
+  set reload_file      = $outputDir/ascii/reload_commands
+
+########################################################################
+# source reload commands
+########################################################################
+  
+  if ( -d $outputDir )  then
+    if ( -f $reload_file ) then
+      if ( -r $reload_file ) then
+        source $reload_file
+      else
+        unset echo
+        echo "ERROR: reload file is not readable: $reload_file"
+        exit 1
+      endif
+    endif
+  else
+    mkdir -p $outputDir
+    if ( $ireload != 1 ) then
+      set reload_file = $outputDir_ltfs/ascii/reload_commands
+      gcp -v -d $reload_file reload_commands
+      tar -xvf reload_commands
+      source reload_commands
+    endif
+  endif
+
+  if ( ! -d $stdoutDir ) mkdir -p $stdoutDir
+  if ( ! -d $stdoutDir ) then
+    echo "ERROR: $stdoutDir is not a directory."
+    exit 1
+  endif
+
+########################################################################
+# set up working directory structure
+########################################################################
+  
+  if ( -d $workDir ) then
+   rm -rf $workDir
+  endif
+  mkdir -p $workDir
+
+  lfs setstripe $workDir $lustre_options
+  if ( ! -d $workDir ) then
+    echo "ERROR: $workDir is not a directory."
+    exit 1
+  endif
+ 
+  cd $workDir
+ 
+  if ( ! -d INPUT   ) mkdir INPUT 
+  lfs setstripe INPUT $lustre_options
+  if ( ! -d INPUT ) then
+    echo "ERROR: $work/INPUT/ is not a directory."
+    exit 1
+  endif
+ 
+  if ( ! -d RESTART ) mkdir RESTART
+  lfs setstripe RESTART $lustre_options
+  if ( ! -d RESTART ) then
+    echo "ERROR: $work/RESTART/ is not a directory."
+    exit 1
+  endif
+
+########################################################################
+# check on existence of data in short-term scratch and then link data to 
+# workdir
+########################################################################
+
+#Need to override hydrography and land inputs in input_data
+  set data = $input_data_land
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -s $data/$index .
+    end
+  endif
+
+  set data = $input_hydrography
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -s $data/$index .
+    end
+  endif
+  set data = $input_data
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -s $data/$index .
+    end
+  endif
+
+  set data = $mosaic_grid
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -sf $data/$index .
+    end
+  endif
+
+  set data = $input_data_grid
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -s $data/$index .
+    end
+  endif
+
+  set data = $initCond
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -s $data/$index .
+    end
+  endif
+
+  set data = $dst_static_veg
+  if ($data != 'null') then
+    set list = `ls -C1 $data`
+    cd $workDir/INPUT
+    foreach index ($list)
+      echo $index
+      ln -s $data/$index .
+    end
+  endif
+
+  if ( $ireload == 1 ) then
+    set data = $dst_restart_land
+    if ($data != 'null') then
+      set list = `ls -C1 $data`
+      cd $workDir/INPUT
+      foreach index ($list)
+        echo $index
+        ln -sf $data/$index .
+      end
+    endif
+  endif
+
+########################################################################
+# copy executable
+########################################################################
+
+  cd $workDir
+  if ( -e $executable ) then
+  cp $executable $executable:t
+  else
+    gcp -v $executable $executable:t  #:s+/++ .
+    chmod +xr $executable:t
+  endif
+
+########################################################################
+# generate field_table
+########################################################################
+
+source $field_table
+
+########################################################################
+# generate diag_table 
+########################################################################
+
+source $diag_table
+
+########################################################################
+# generate data_table 
+########################################################################
+
+touch data_table
+
+########################################################################
+# begin loop over $segmentsPerJob
+########################################################################
+  
+  while ($irun <= $segmentsPerJob)
+
+    if($ireload == 1 ) then
+      setenv warmstart .false.
+    else
+      setenv warmstart .true.
+    endif
+
+    cd $workDir
+    setenv months  $monthslist[$irun]
+    setenv days    $dayslist[$irun]
+    setenv hours   $hourslist[$irun]
+
+########################################################################
+# generate input.nml
+########################################################################
+    if ( $ireload == 1 ) then
+        set adjust_dry_mass = '.true.'
+    else
+        set adjust_dry_mass = '.false.'
+    endif
+
+    source $input_nml 
+
+    echo loop_$irun/$segmentsPerJob
+    echo run
+
+########################################################################
+# run the model
+########################################################################
+
+#   aprun -n ${npes} -N $mpi_tasks_per_node -d ${OMP_NUM_THREADS} ./$executable:t |& tee fms.out
+    aprun -n ${npes} -d $spread                                  ./$executable:t |& tee fms.out
+
+    if ( $status != 0 ) then
+      echo "ERROR: in mpirun: run $ireload, loop $irun"
+      exit 1
+    endif
+
+########################################################################
+# generate date for file names
+########################################################################
+ 
+    set begindate = `time_stamp.csh -bf digital`
+    if ( $begindate == "" ) set begindate = tmp`date '+%j%H%M%S'`
+
+    set enddate = `time_stamp.csh -ef digital`
+    if ( $enddate == "" ) set enddate = tmp`date '+%j%H%M%S'`
+    set fyear = `echo $enddate | cut -c -4`
+
+    cd $workDir
+    cat time_stamp.out
+#   if ( -f time_stamp.out ) rm -f time_stamp.out
+
+########################################################################
+# save ascii output files
+########################################################################
+
+    if ( ! -d $outputDir/ascii ) mkdir $outputDir/ascii
+    if ( ! -d $outputDir/ascii ) then
+     echo "ERROR: $outputDir/ascii is not a directory."
+     exit 1
+    endif
+
+    foreach out (`ls *.out *.results`)
+      mv $out $begindate.$out
+    end
+
+    tar cvf - *\.out *\.results | gzip -c > $outputDir/ascii/$begindate.ascii_out.tgz
+
+    msub -v base=$sourceDir,source=$outputDir/ascii/$begindate.ascii_out.tgz,destination=gfdl:$gfdl_archive/ascii/$begindate.ascii_out.tgz,extension=null,type=ascii $send_file
+
+    rm -rf *\.out *\.results
+
+########################################################################
+# move restart files 
+########################################################################
+
+    cd $workDir 
+
+    if ( ! -d $outputDir/restart ) mkdir -p $outputDir/restart
+    if ( ! -d $outputDir/restart ) then
+      echo "ERROR: $outputDir/restart is not a directory."
+      exit 1
+    endif
+
+    find $workDir/RESTART -iname '*.res*' > file.restart.list.txt
+    set resfiles     = `wc -l file.restart.list.txt | awk '{print $1}'`
+    set dateDir      = $outputDir/restart/$enddate
+    set dateDir_ltfs = $outputDir_ltfs/restart/$enddate
+
+    if ( $irun < $segmentsPerJob ) then
+      set patternGrepRestarts = '\<res\>'
+      set patternGrepNC = '\<nc\>'
+      find $workDir/INPUT   -maxdepth 1 -type f | egrep "$patternGrepRestarts" | xargs -r rm -f
+      find $workDir/RESTART -maxdepth 1 -type f | egrep "$patternGrepRestarts" | xargs -r cp -f -t $workDir/INPUT
+      find $workDir/RESTART -maxdepth 1 -type f | egrep "$patternGrepNC"       | xargs -r cp -f -t $workDir/INPUT
+    endif
+
+    if ( $resfiles > 0 ) then
+
+      set dateDir      = $outputDir/restart/$enddate
+      set dateDir_ltfs = $outputDir_ltfs/restart/$enddate
+      if ( ! -d $dateDir ) mkdir $dateDir
+      if ( ! -d $dateDir ) then
+        echo "ERROR: $dateDir is not a directory."
+        exit 1
+      endif
+
+      set restart_file = $dateDir
+      set list = `ls -C1 $workDir/RESTART`
+      foreach index ($list)
+        mv $workDir/RESTART/$index $restart_file/$index
+      end
+
+      msub -v base=$sourceDir,source=$outputDir/restart/$enddate,destination=gfdl:$gfdl_archive/restart/$enddate,extension=tar,type=restart $send_file
+
+    endif
+
+########################################################################
+# move history files
+########################################################################
+
+    cd $workDir
+    
+    if ( ! -d $outputDir/history ) mkdir -p $outputDir/history
+    if ( ! -d $outputDir/history ) then
+      echo "ERROR: $outputDir/history is not a directory."
+      exit 1
+    endif
+
+    set dateDir = $outputDir/history/$begindate 
+    if ( ! -d  $dateDir ) mkdir $dateDir
+    if ( ! -d  $dateDir ) then
+      echo "ERROR: $dateDir is not a directory."
+      exit 1
+    endif
+
+    find $workDir -type f -maxdepth 1 -regex '.*.nc'      -exec mv {} $dateDir \;
+    find $workDir -type f -maxdepth 1 -regex '.*.nc.....' -exec mv {} $dateDir \;
+
+    msub -v base=$sourceDir,source=$outputDir/history/$begindate,destination=gfdl:$gfdl_archive/history/$begindate,extension=tar,type=history $send_file
+ 
+########################################################################
+# terminate script if mpirun crashed
+########################################################################
+    
+    cd $workDir
+
+    if ( $?MPI_FAIL ) then
+      unset echo
+      echo "ERROR: in mpirun, core dumped: run $ireload, loop $irun" 
+      echo "ERROR: Any output that may have been generated " 
+      echo "       is in $outputDir" 
+      exit 1
+    endif
+
+########################################################################
+# terminate script if there are no restart files
+########################################################################
+
+    if ( $resfiles == 0 ) then
+      unset echo
+      echo "ERROR: no restart files exist, run $ireload, loop $irun" 
+      exit 1
+    endif
+
+########################################################################
+# write new reload information
+########################################################################
+    
+    @ irun++
+
+    if ( -f $reload_file ) then
+      mv -f $reload_file ${reload_file}_prev
+    endif
+    if ( $irun <= $segmentsPerJob ) then
+      echo "set irun          =  $irun"               >  $reload_file
+    else
+      @ ireload++
+      echo "set irun          =  1"                   >  $reload_file
+    endif
+    echo   "set ireload       =  $ireload"            >> $reload_file
+    echo   "set initCond      =  $restart_file"       >> $reload_file
+    echo   "set fyear         =  $fyear"              >> $reload_file
+
+  end
+
+########################################################################
+# loop over $segmentsPerJob ended
+########################################################################
+
+########################################################################
+# reload script if necessary
+########################################################################
+
+  if ( $ireload <= $numSubmissions ) then
+
+    if ( -f $scriptName ) then
+      cd $scriptName:h
+       msub $scriptName
+       #msub -q persistent $scriptName
+       # $scriptName # only for dual-running for c2?      cd $workDir
+    else
+      unset echo
+      echo "WARNING: reload script does not exist, run $ireload, loop $irun" 
+      echo "         $scriptName could not be resubmitted" 
+    endif
+
+  endif
+
+unset echo
+set beforewaittime = `date "+%s"`
+set ttlnowait = `echo "$beforewaittime - $beginruntime" | bc -l`
+echo "beginruntime $beginruntime beforewaittime $beforewaittime ttlnowait $ttlnowait"
+wait
+set endruntime = `date "+%s"`
+set ttlruntime = `echo "$endruntime - $beginruntime" | bc -l`
+echo "beginruntime $beginruntime endruntime $endruntime ttlruntime $ttlruntime"
+echo end_of_run
+echo "NOTE: Natural end-of-script for $scriptName."
+exit 0
+  

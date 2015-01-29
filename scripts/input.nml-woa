@@ -1,0 +1,31 @@
+cat >>! input.nml <<EOF
+
+!&interpolator_nml
+!  verbose=T
+!  conservative_interp=T
+!/       
+
+&woa_nml
+    use_woa_timeseries = .false.
+!   use_woa_timeseries = $use_woa_timeseries
+!    woa_dataset_entry =  $baseDate,
+!                         $baseDate,
+!    woa_dataset_entry =  1 1 16 0 0 0,
+!                         1 1 16 0 0 0,
+!    family_names = "woa"
+!    in_family1 = T,T,
+!    data_names = "ptemp"
+!   data_names = "salt"
+!   data_units = "PSU"
+!   data_names = "ptemp"
+!   data_units = "C"
+   data_names = "ptemp", "salt"
+   data_units = "C", "PSU"
+!    data_names = "salt"
+!    time_varying_species = F, F,
+    filename = "WOA05_pottemp_salt.nc"
+    interp_method = 'bilinear',    
+/
+
+
+EOF
