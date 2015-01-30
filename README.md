@@ -25,7 +25,7 @@ where input.nml-woa:
    
 Q/A:
 -------------------
-我之前跑的AMIP runs差不多都已經完成，想做一個一樣設定的HiRAM/SIT AMIP integration，之前有跑過一個月，但是SiT會輸出很多檔案跟很多變數，用mppnccombine合併會有問題，想請問老師是否已經改成ice只輸出一個檔案？另外，如果要積分一個AMIP實驗，是否可以減少SiT變數輸出？目前ice輸出檔案太大了
+之前跑的AMIP runs差不多都已經完成，想做一個一樣設定的HiRAM/SIT AMIP integration，之前有跑過一個月，但是SiT會輸出很多檔案跟很多變數，用mppnccombine合併會有問題，想請問是否已經改成ice只輸出一個檔案？另外，如果要積分一個AMIP實驗，是否可以減少SiT變數輸出？目前ice輸出檔案太大了
 ------------------
 
 1) Yes. I have changed the setup of ice component to have only one output.
