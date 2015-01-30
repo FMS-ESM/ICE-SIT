@@ -4,7 +4,7 @@ The newest version is v0.50
 
 I have added a routine for reading WOA data to  SIT. A few experiments using climate SST and climate WOA (WOA05_pottemp_salt.nc) data are conducted now.
 
-You can find the running script and codes in 
+You can find the running script and codes in the following directoy in GAEA 
 /autofs/na2_home2/Benjei.Tsuang/tikal/update/v0.5
 /autofs/na2_home2/Benjei.Tsuang/tikal/update/v0.5/scripts
 
