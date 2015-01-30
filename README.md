@@ -29,6 +29,7 @@ https://github.com/btsuang/TW-SIT
 
 Note that,
 1) The setup of ice component is to have only one output.
+
 2) The grid unmatched problem for ice model output can be solved by fregrid using the command as 
 
 gaea7:/<5>c192_dpc_sit_m2_5d5d5d_v0.50_test/history/19800104 > fregrid --input_mosaic ../../work/INPUT/ocean_mosaic.nc --nlon 720 --nlat 360 --input_file 19800104.ice_daily.nc --output_file 19800104.ice_daily.ll.nc --scalar_field wt,ws
