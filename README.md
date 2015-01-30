@@ -36,5 +36,6 @@ which regrid data to regular lat and lon
 4) You can change the maximum depth (m) and model levels for handing by SIT by change the following  variables iin sit_nml:
 
 ocn_tlz (maximum ocn depth)
-ocn_kl (number of model levessl
-bathy_default
+ocn_kl (number of model levels in addition to 12  levels with  upper 10m  ddepth)
+bathy_default (defaul depth in each ocn grid)
+
