@@ -2695,7 +2695,7 @@ endwhere
 
       call get_amip_ice (Ice%Time, Amip_ice, Ice%obsseaice)
       call get_amip_sst (Ice%Time, Amip_sst, Ice%obswtb, Ice%lon, Ice%lat )
-      if (lwoa_gfdl) then
+      if (do_sit.and.lwoa_gfdl) then
         call specified_woa_driver (is, js, Ice%Time, Ice%p_flux, woa)        
       endif
 
@@ -3062,10 +3062,10 @@ if (do_sit) then
                 !!! Ice%seaice,                                                    &
                 Ice%grndcapc, Ice%grndhflx, Ice%grndflux    )
 
-  if (.NOT.lobswt) deallocate ( Ice%obswt )
-  if (.NOT.lobsws) deallocate ( Ice%obsws )
-  if (.NOT.lobswu) deallocate ( Ice%obswu )
-  if (.NOT.lobswv) deallocate ( Ice%obswv )
+  if (.NOT.lobswt) deallocate ( Ice%obswt )                    ! allocated by woa_init
+  if (.NOT.lobsws) deallocate ( Ice%obsws )                    ! allocated by woa_init
+  if (.NOT.lobswu) deallocate ( Ice%obswu )                    ! allocated by woa_init
+  if (.NOT.lobswv) deallocate ( Ice%obswv )                    ! allocated by woa_init
   if (lwoa_gfdl) then
     deallocate (Ice%p_flux)
     call woa_dealloc (woa)
