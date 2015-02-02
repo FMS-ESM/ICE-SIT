@@ -1,6 +1,6 @@
 # TW-SIT
 
-You can find my sit code in both gaea and GitHub. The newest version is v0.50
+You can find my sit code in both gaea and GitHub. The newest version is v0.5101
 
 This version adds a routine for reading WOA (World Ocean Atlas) potential temperature and salinity to SIT. A few experiments using climate SST and climate WOA (WOA05_pottemp_salt.nc) data are conducted now. 
 
