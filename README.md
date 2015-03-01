@@ -1,4 +1,4 @@
-# TW-SIT
+# ICE-SIT
 
 You can find my sit code in both gaea and GitHub. The newest version is v0.50
 
@@ -24,7 +24,7 @@ A new namelist woa_nml is designed for describing the WOA data.
 
 In addition, I am experimenting GitHUB according to suggestion from OCN group. I have put the sit code in:
 
-https://github.com/btsuang/TW-SIT
+https://github.com/btsuang/ICE-SIT
 
 
 Note that,
