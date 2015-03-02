@@ -1,4 +1,5 @@
 # ICE-SIT
+A group of scientists for developing Earth System Models (ESM) using GFDL FMS (Flexible Modeling System) and SIT (one column Snow/Ice/Thermocline) coupler. The models include MPI-ECHAM, NCAR-CAM, GFDL-HiRAM and CWB-GFS.
 
 You can find my sit code in both gaea and GitHub. The newest version is v0.50
 
